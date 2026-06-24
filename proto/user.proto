@@ -3,21 +3,11 @@ syntax = "proto3";
 package user;
 
 service UserService {
-  rpc Register (RegisterRequest) returns (RegisterResponse) {};
   rpc GetProfile (GetProfileRequest) returns (GetProfileResponse) {};
 }
 
 message User {
   string realname = 1;
-}
-
-message RegisterRequest {
-  int32 id = 1;
-  string realname = 2;
-}
-
-message RegisterResponse {
-  bool success = 1;
 }
 
 message GetProfileRequest {

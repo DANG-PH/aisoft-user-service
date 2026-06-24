@@ -15,15 +15,6 @@ export interface User {
   realname: string;
 }
 
-export interface RegisterRequest {
-  id: number;
-  realname: string;
-}
-
-export interface RegisterResponse {
-  success: boolean;
-}
-
 export interface GetProfileRequest {
   id: number;
 }
@@ -35,20 +26,16 @@ export interface GetProfileResponse {
 export const USER_PACKAGE_NAME = "user";
 
 export interface UserServiceClient {
-  register(request: RegisterRequest, metadata?: Metadata): Observable<RegisterResponse>;
-
   getProfile(request: GetProfileRequest, metadata?: Metadata): Observable<GetProfileResponse>;
 }
 
 export interface UserServiceController {
-  register(request: RegisterRequest, metadata?: Metadata): Observable<RegisterResponse>;
-
   getProfile(request: GetProfileRequest, metadata?: Metadata): Observable<GetProfileResponse>;
 }
 
 export function UserServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["register", "getProfile"];
+    const grpcMethods: string[] = ["getProfile"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);
