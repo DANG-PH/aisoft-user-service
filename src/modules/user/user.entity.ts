@@ -1,16 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne,CreateDateColumn,UpdateDateColumn, Index, Unique } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('users')
 export class User_Entity {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ type: 'bigint', nullable: true, unique: true })
-  auth_id: number;
+    @Column({ unique: true })
+    username: string;
 
-  @Column({ nullable: true, default: "" })
-  realname: string;
+    @Column({ default: '' })
+    realname: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @Column({ unique: true })
+    email: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 }
