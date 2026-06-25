@@ -11,31 +11,166 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "user";
 
+/** ----- Entity ----- */
 export interface User {
+  id: number;
+  username: string;
   realname: string;
+  email: string;
 }
 
-export interface GetProfileRequest {
+/** Điều kiện tìm kiếm dùng chung cho các API GET */
+export interface UserCondition {
+  username?: string | undefined;
+  realname?: string | undefined;
+}
+
+/** ----- Create ----- */
+export interface CreateUserRequest {
+  username: string;
+  realname: string;
+  email: string;
+}
+
+export interface CreateUserResponse {
+  user: User | undefined;
+}
+
+/** ----- Update ----- */
+export interface UpdateUserRequest {
+  id: number;
+  username?: string | undefined;
+  realname?: string | undefined;
+  email?: string | undefined;
+}
+
+export interface UpdateUserResponse {
+  user: User | undefined;
+}
+
+/** ----- Delete ----- */
+export interface DeleteUserRequest {
   id: number;
 }
 
-export interface GetProfileResponse {
+export interface DeleteUserResponse {
+  success: boolean;
+}
+
+/** ----- Get page ----- */
+export interface GetUserPageRequest {
+  page: number;
+  pageSize: number;
+  condition: UserCondition | undefined;
+}
+
+export interface GetUserPageResponse {
+  users: User[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+/** ----- Get many ----- */
+export interface GetManyUsersRequest {
+  condition: UserCondition | undefined;
+}
+
+export interface GetManyUsersResponse {
+  users: User[];
+}
+
+/** ----- Get by id ----- */
+export interface GetUserByIdRequest {
+  id: number;
+}
+
+export interface GetUserByIdResponse {
+  user: User | undefined;
+}
+
+/** ----- Get one ----- */
+export interface GetOneUserRequest {
+  condition: UserCondition | undefined;
+}
+
+export interface GetOneUserResponse {
   user: User | undefined;
 }
 
 export const USER_PACKAGE_NAME = "user";
 
 export interface UserServiceClient {
-  getProfile(request: GetProfileRequest, metadata?: Metadata): Observable<GetProfileResponse>;
+  /** POST /user */
+
+  createUser(request: CreateUserRequest, metadata?: Metadata): Observable<CreateUserResponse>;
+
+  /** PUT /user/:id */
+
+  updateUser(request: UpdateUserRequest, metadata?: Metadata): Observable<UpdateUserResponse>;
+
+  /** DELETE /user/:id */
+
+  deleteUser(request: DeleteUserRequest, metadata?: Metadata): Observable<DeleteUserResponse>;
+
+  /** GET /user/page */
+
+  getUserPage(request: GetUserPageRequest, metadata?: Metadata): Observable<GetUserPageResponse>;
+
+  /** GET /user/many */
+
+  getManyUsers(request: GetManyUsersRequest, metadata?: Metadata): Observable<GetManyUsersResponse>;
+
+  /** GET /user/:id */
+
+  getUserById(request: GetUserByIdRequest, metadata?: Metadata): Observable<GetUserByIdResponse>;
+
+  /** GET /user/one */
+
+  getOneUser(request: GetOneUserRequest, metadata?: Metadata): Observable<GetOneUserResponse>;
 }
 
 export interface UserServiceController {
-  getProfile(request: GetProfileRequest, metadata?: Metadata): Observable<GetProfileResponse>;
+  /** POST /user */
+
+  createUser(request: CreateUserRequest, metadata?: Metadata): Observable<CreateUserResponse>;
+
+  /** PUT /user/:id */
+
+  updateUser(request: UpdateUserRequest, metadata?: Metadata): Observable<UpdateUserResponse>;
+
+  /** DELETE /user/:id */
+
+  deleteUser(request: DeleteUserRequest, metadata?: Metadata): Observable<DeleteUserResponse>;
+
+  /** GET /user/page */
+
+  getUserPage(request: GetUserPageRequest, metadata?: Metadata): Observable<GetUserPageResponse>;
+
+  /** GET /user/many */
+
+  getManyUsers(request: GetManyUsersRequest, metadata?: Metadata): Observable<GetManyUsersResponse>;
+
+  /** GET /user/:id */
+
+  getUserById(request: GetUserByIdRequest, metadata?: Metadata): Observable<GetUserByIdResponse>;
+
+  /** GET /user/one */
+
+  getOneUser(request: GetOneUserRequest, metadata?: Metadata): Observable<GetOneUserResponse>;
 }
 
 export function UserServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["getProfile"];
+    const grpcMethods: string[] = [
+      "createUser",
+      "updateUser",
+      "deleteUser",
+      "getUserPage",
+      "getManyUsers",
+      "getUserById",
+      "getOneUser",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);

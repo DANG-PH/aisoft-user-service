@@ -3,17 +3,104 @@ syntax = "proto3";
 package user;
 
 service UserService {
-  rpc GetProfile (GetProfileRequest) returns (GetProfileResponse) {};
+  // POST /user
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+
+  // PUT /user/:id
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
+
+  // DELETE /user/:id
+  rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
+
+  // GET /user/page
+  rpc GetUserPage (GetUserPageRequest) returns (GetUserPageResponse);
+
+  // GET /user/many
+  rpc GetManyUsers (GetManyUsersRequest) returns (GetManyUsersResponse);
+
+  // GET /user/:id
+  rpc GetUserById (GetUserByIdRequest) returns (GetUserByIdResponse);
+
+  // GET /user/one
+  rpc GetOneUser (GetOneUserRequest) returns (GetOneUserResponse);
 }
 
+// ----- Entity -----
 message User {
-  string realname = 1;
+  int32 id = 1;
+  string username = 2;
+  string realname = 3;
+  string email = 4;
 }
 
-message GetProfileRequest {
+// Điều kiện tìm kiếm dùng chung cho các API GET
+message UserCondition {
+  optional string username = 1;
+  optional string realname = 2;
+}
+
+// ----- Create -----
+message CreateUserRequest {
+  string username = 1;
+  string realname = 2;
+  string email = 3;
+}
+message CreateUserResponse {
+  User user = 1;
+}
+
+// ----- Update -----
+message UpdateUserRequest {
+  int32 id = 1;
+  optional string username = 2;
+  optional string realname = 3;
+  optional string email = 4;
+}
+message UpdateUserResponse {
+  User user = 1;
+}
+
+// ----- Delete -----
+message DeleteUserRequest {
   int32 id = 1;
 }
+message DeleteUserResponse {
+  bool success = 1;
+}
 
-message GetProfileResponse {
+// ----- Get page -----
+message GetUserPageRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+  UserCondition condition = 3;
+}
+message GetUserPageResponse {
+  repeated User users = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 pageSize = 4;
+}
+
+// ----- Get many -----
+message GetManyUsersRequest {
+  UserCondition condition = 1;
+}
+message GetManyUsersResponse {
+  repeated User users = 1;
+}
+
+// ----- Get by id -----
+message GetUserByIdRequest {
+  int32 id = 1;
+}
+message GetUserByIdResponse {
+  User user = 1;
+}
+
+// ----- Get one -----
+message GetOneUserRequest {
+  UserCondition condition = 1;
+}
+message GetOneUserResponse {
   User user = 1;
 }
